@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Profile - {{ user.name }}{% endblock %}
+{% block content %}
+<div class="col-md-6 mx-auto fade-in">
+  <div class="card card-hero p-4 text-center">
+    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_pic) }}" class="rounded-circle mb-3" width="130" height="130" style="object-fit:cover;">
+    <h4>{{ user.name }}</h4>
+    <p class="text-muted">{{ user.email }}</p>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="profile_pic" class="form-control mb-3" accept="image/*" required>
+      <button class="btn btn-primary w-100">Upload</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

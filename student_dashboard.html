@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="jumbotron bg-gradient-primary text-white rounded shadow-sm mb-4 position-relative">
+        <div class="position-absolute top-0 end-0 p-3">
+          <i class="fas fa-star fa-2x text-warning animate-pulse"></i>
+        </div>
+        <h1 class="display-4 font-weight-bold">Welcome back, {{ current_user.name }}!</h1>
+        <p class="lead">Explore our vast collection of books and manage your orders.</p>
+        <hr class="my-4 bg-white opacity-50">
+        <p class="mb-0">Ready to discover your next favorite book?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm hover-card">
+        <div class="card-body text-center">
+          <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
+          <h5 class="card-title">Browse Catalog</h5>
+          <p class="card-text">Discover new books and add them to your cart.</p>
+          <a href="/catalog" class="btn btn-primary btn-lg">Browse Books</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm hover-card">
+        <div class="card-body text-center">
+          <i class="fas fa-shopping-cart fa-3x text-info mb-3"></i>
+          <h5 class="card-title">Your Cart</h5>
+          <p class="card-text">View and manage your selected books.</p>
+          <a href="/cart" class="btn btn-info btn-lg">
+            View Cart <span class="badge badge-light">{{ cart_count }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm hover-card">
+        <div class="card-body text-center">
+          <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+          <h5 class="card-title">Request a Book</h5>
+          <p class="card-text">Can't find what you're looking for? Request it!</p>
+          <a href="/request_book" class="btn btn-success btn-lg">Make Request</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+          <h4 class="mb-0"><i class="fas fa-history mr-2"></i>Your Order History</h4>
+        </div>
+        <div class="card-body">
+          {% if orders %}
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th><i class="fas fa-book mr-1"></i>Book Title</th>
+                  <th><i class="fas fa-hashtag mr-1"></i>Quantity</th>
+                  <th><i class="fas fa-info-circle mr-1"></i>Status</th>
+                  <th><i class="fas fa-calendar mr-1"></i>Order Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for o in orders %}
+                <tr>
+                  <td class="font-weight-bold">{{ o.book.title }}</td>
+                  <td>{{ o.quantity }}</td>
+                  <td>
+                    {% if o.status == 'pending' %}
+                      <span class="badge badge-warning">{{ o.status|title }}</span>
+                    {% elif o.status == 'approved' %}
+                      <span class="badge badge-success">{{ o.status|title }}</span>
+                    {% else %}
+                      <span class="badge badge-secondary">{{ o.status|title }}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ o.created_at.strftime('%B %d, %Y') }}</td>
+                  <td>
+                    {% if o.status == 'pending' %}
+                      <a href="{{ url_for('student_edit_order', order_id=o.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                      <form method="POST" action="{{ url_for('student_cancel_order', order_id=o.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this order?')">Cancel</button>
+                      </form>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-5">
+            <i class="fas fa-shopping-bag fa-4x text-muted mb-3"></i>
+            <h5 class="text-muted">No orders yet</h5>
+            <p class="text-muted">Start exploring our catalog to place your first order!</p>
+            <a href="/catalog" class="btn btn-primary">Browse Catalog</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

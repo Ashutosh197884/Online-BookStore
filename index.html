@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8 mx-auto text-center">
+    <div class="card card-hero p-4 fade-in">
+      <h1>Welcome to {{ config.get('APP_NAME','Bookstore') }}</h1>
+      <p class="lead">Login as admin or student. Admins manage stock; students browse & order.</p>
+      <a class="btn btn-primary btn-lg" href="/login">Get Started</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

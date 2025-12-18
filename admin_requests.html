@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Book Requests{% endblock %}
+{% block content %}
+<h3>Pending Book Requests</h3>
+{% if requests %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Genre</th>
+      <th>Requested by</th>
+      <th>Reason</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for req in requests %}
+    <tr>
+      <td>{{ req.title }}</td>
+      <td>{{ req.author }}</td>
+      <td>{{ req.genre }}</td>
+      <td>{{ req.user.name }}</td>
+      <td>{{ req.reason or 'N/A' }}</td>
+      <td>
+        <form method="POST" action="/admin/approve_request/{{ req.id }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-success btn-sm">Approve & Add Book</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin_cancel_request', req_id=req.id) }}" style="display:inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to reject this request?')">Reject</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No pending requests.</p>
+{% endif %}
+<a class="btn btn-secondary" href="/admin">Back to Dashboard</a>
+{% endblock %}

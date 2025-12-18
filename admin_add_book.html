@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Add Book{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <div class="card card-hero p-4 fade-in">
+      <h3>Add New Book</h3>
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-2">{{ form.title(class_='form-control', placeholder='Title') }}</div>
+        <div class="mb-2">{{ form.author(class_='form-control', placeholder='Author') }}</div>
+        <div class="mb-2">{{ form.genre(class_='form-control', placeholder='Genre') }}</div>
+        <div class="mb-2">{{ form.isbn(class_='form-control', placeholder='ISBN') }}</div>
+        <div class="mb-2">{{ form.price(class_='form-control', placeholder='Price') }}</div>
+        <div class="mb-2">{{ form.total_copies(class_='form-control', placeholder='Total Copies') }}</div>
+        <div class="d-grid">{{ form.submit(class_='btn btn-success') }}</div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

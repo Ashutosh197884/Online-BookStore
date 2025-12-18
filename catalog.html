@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Catalog{% endblock %}
+{% block content %}
+<div class="row">
+  {% for b in books %}
+  <div class="col-md-4 mb-3">
+    <div class="card p-3 card-hero fade-in">
+      <h5>{{ b.title }}</h5>
+      <p class="mb-1"><small>{{ b.author }}</small></p>
+      <p>Available: {{ b.available_copies }}</p>
+      <form method="POST" action="/add_to_cart/{{ b.id }}">
+        <!--< Removed csrf_token to fix undefined error -->
+        <input type="number" name="qty" value="1" min="1" max="{{ b.available_copies }}" class="form-control mb-2">
+        <button class="btn btn-primary w-100">Add to Cart</button>
+      </form>
+      <form method="POST" action="/wishlist/toggle/{{ b.id }}" class="mt-2">
+        <!--< Removed csrf_token to fix undefined error -->
+        <button class="btn btn-outline-secondary w-100">♡ Wishlist</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

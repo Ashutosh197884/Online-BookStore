@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Edit Order{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Edit Order</h4>
+        </div>
+        <div class="card-body">
+          <p><strong>Book:</strong> {{ order.book.title }}</p>
+          <p><strong>Current Quantity:</strong> {{ order.quantity }}</p>
+          <p><strong>Available Copies:</strong> {{ order.book.available_copies + order.quantity }}</p>
+          <form method="POST">
+            <!--< Removed csrf_token to fix undefined error -->
+            <div class="form-group">
+              <label for="quantity">New Quantity:</label>
+              <input type="number" class="form-control" id="quantity" name="quantity" value="{{ order.quantity }}" min="1" max="{{ order.book.available_copies + order.quantity }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Order</button>
+            <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

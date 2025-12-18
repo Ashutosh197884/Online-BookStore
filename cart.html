@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+<h3>Your Cart</h3>
+{% if cart_items %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Book</th>
+      <th>Author</th>
+      <th>Quantity</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in cart_items %}
+    <tr>
+      <td>{{ item.book.title }}</td>
+      <td>{{ item.book.author }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>
+        <form method="POST" action="/cart/remove/{{ item.id }}" style="display:inline;">
+          <!--< Removed csrf_token to fix undefined error -->
+          <button class="btn btn-danger btn-sm">Remove</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<form method="POST" action="/cart/checkout">
+  <!--< Removed csrf_token to fix undefined error -->
+  <div class="form-group">
+    <label for="payment_method">Payment Method:</label>
+    <select name="payment_method" id="payment_method" class="form-control">
+      <option value="stripe">Stripe</option>
+      <option value="mock">Mock Payment</option>
+    </select>
+  </div>
+  <button class="btn btn-success">Proceed to Payment</button>
+</form>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+<a class="btn btn-secondary" href="/catalog">Continue Shopping</a>
+{% endblock %}
